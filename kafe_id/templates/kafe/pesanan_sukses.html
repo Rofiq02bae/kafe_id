@@ -1,0 +1,14 @@
+<meta http-equiv="refresh" content="3;url={{ redirect_url }}">
+<h2>Pesanan dari Meja {{ meja.nama }} berhasil dikirim!</h2>
+<p>Silakan tunggu pesanan Anda diproses.</p>
+<p>Anda akan diarahkan ke menu dalam <span id="countdown">3</span> detik...</p>
+<script>
+  let seconds = 3;
+  const countdown = document.getElementById('countdown');
+  setInterval(function() {
+    seconds--;
+    if (seconds > 0) {
+      countdown.textContent = seconds;
+    }
+  }, 1000);
+</script>

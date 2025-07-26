@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard Kasir</title>
+    <style>
+        table, th, td {
+            border: 1px solid black; border-collapse: collapse;
+            padding: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Daftar Pesanan</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Antrean</th>
+                <th>Meja</th>
+                <th>Status</th>
+                <th>Detail</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pesanan in daftar_pesanan %}
+            <tr>
+                <td>{{ pesanan.id }}</td>
+                <td>{{ pesanan.meja.nama }}</td>
+                <td>{{ pesanan.status }}</td>
+                <td>
+                    <ul>
+                    {% for item in pesanan.detailpesanan_set.all %}
+                        <li>{{ item.menu.nama }} (x{{ item.jumlah }})</li>
+                    {% endfor %}
+                    </ul>
+                </td>
+                <td>
+                    <a href="{% url 'update_status' pesanan.id 'diproses' %}">Diproses</a> |
+                    <a href="{% url 'update_status' pesanan.id 'selesai' %}">Selesai</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

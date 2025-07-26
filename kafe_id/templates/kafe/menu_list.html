@@ -1,0 +1,14 @@
+<h2>Meja: {{ meja.nama }}</h2>
+<form method="POST" action="{% url 'proses_pesanan' %}">
+  {% csrf_token %}
+  <input type="hidden" name="meja_id" value="{{ meja.id }}">
+  
+  {% for item in menu_items %}
+    <div>
+      <label>{{ item.nama }} - Rp{{ item.harga }}</label>
+      <input type="number" name="menu_{{ item.id }}" min="0" value="0">
+    </div>
+  {% endfor %}
+
+  <button type="submit">Pesan</button>
+</form>

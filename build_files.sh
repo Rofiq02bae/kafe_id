@@ -1,14 +1,10 @@
 #!/bin/bash
-# Build script for Vercel deployment
 
-# Install dependencies
+# Install requirements
 pip install -r requirements.txt
 
-# Make migrations 
-python manage.py makemigrations
+# Run migrations
+python manage.py migrate --run-syncdb
 
-# Migrasi database
-python manage.py migrate
-
-# Kumpulkan static files
-python manage.py collectstatic --noinput
+# Collect static files
+python manage.py collectstatic --noinput --clear

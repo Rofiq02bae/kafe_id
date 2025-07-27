@@ -3,33 +3,21 @@
   "builds": [
     {
       "src": "vercel_app.py",
-      "use": "@vercel/python",
-      "config": { "maxLambdaSize": "15mb", "runtime": "python3.12" }
-    },
-    {
-      "src": "build_files.sh",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "staticfiles_build"
-      }
+      "use": "@vercel/python"
     }
   ],
   "routes": [
     {
       "src": "/static/(.*)",
-      "dest": "/staticfiles_build/static/$1"
+      "dest": "/static/$1"
     },
     {
       "src": "/media/(.*)",
-      "dest": "/static/media/$1"
+      "dest": "/media/$1"
     },
     {
       "src": "/(.*)",
       "dest": "vercel_app.py"
     }
-  ],
-  "env": {
-    "DJANGO_SETTINGS_MODULE": "app.settings",
-    "PYTHONUNBUFFERED": "1"
-  }
+  ]
 }

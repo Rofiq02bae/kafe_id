@@ -1,46 +1,108 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Dashboard Kasir</title>
-    <style>
-        table, th, td {
-            border: 1px solid black; border-collapse: collapse;
-            padding: 8px;
-        }
-    </style>
-</head>
-<body>
-    <h2>Daftar Pesanan</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Antrean</th>
-                <th>Meja</th>
-                <th>Status</th>
-                <th>Detail</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for pesanan in daftar_pesanan %}
-            <tr>
-                <td>{{ pesanan.id }}</td>
-                <td>{{ pesanan.meja.nama }}</td>
-                <td>{{ pesanan.status }}</td>
-                <td>
-                    <ul>
-                    {% for item in pesanan.detailpesanan_set.all %}
-                        <li>{{ item.menu.nama }} (x{{ item.jumlah }})</li>
+
+{% extends 'base.html' %}
+
+{% block title %}Dashboard Admin Pesanan{% endblock title %}
+
+{% block content %}
+    <div class="max-w-6xl mx-auto bg-white rounded-lg shadow-xl p-8 my-8">
+        <h1 class="text-4xl font-bold text-gray-800 mb-8 text-center">Dashboard Admin Pesanan</h1>
+
+        <!-- Kontainer Tab -->
+        <div class="mb-8">
+            <div class="flex border-b border-gray-200">
+                <button class="tab-button px-6 py-3 text-lg text-gray-600 hover:text-orange-500 active" onclick="openTab(event, 'antri')">Pesanan Antri</button>
+                <button class="tab-button px-6 py-3 text-lg text-gray-600 hover:text-orange-500" onclick="openTab(event, 'diproses')">Pesanan Diproses</button>
+                <button class="tab-button px-6 py-3 text-lg text-gray-600 hover:text-orange-500" onclick="openTab(event, 'selesai')">Pesanan Selesai</button>
+            </div>
+        </div>
+
+        <!-- Konten Tab: Pesanan Antri -->
+        <div id="antri" class="tab-content active">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-6">Daftar Pesanan Antri</h2>
+            {% if pesanan_antri %}
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {% for pesanan in pesanan_antri %}
+                        <div class="card">
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">Pesanan #{{ pesanan.id }}</h3>
+                            <p class="text-gray-700 mb-1">Pelanggan: {{ pesanan.nama_pelanggan }}</p>
+                            <p class="text-gray-700 mb-1">Total: Rp {{ pesanan.total|floatformat:0 }}</p>
+                            <p class="text-gray-700 mb-4">Waktu: {{ pesanan.waktu_pesan|date:"H:i, d M Y" }}</p>
+                            <!-- Anda bisa menambahkan detail lain di sini, misalnya tombol untuk mengubah status -->
+                            <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md">Lihat Detail</button>
+                        </div>
                     {% endfor %}
-                    </ul>
-                </td>
-                <td>
-                    <a href="{% url 'update_status' pesanan.id 'diproses' %}">Diproses</a> |
-                    <a href="{% url 'update_status' pesanan.id 'selesai' %}">Selesai</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</body>
-</html>
+                </div>
+            {% else %}
+                <p class="text-gray-600 text-center">Tidak ada pesanan yang mengantri saat ini.</p>
+            {% endif %}
+        </div>
+
+        <!-- Konten Tab: Pesanan Diproses -->
+        <div id="diproses" class="tab-content">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-6">Daftar Pesanan Diproses</h2>
+            {% if pesanan_diproses %}
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {% for pesanan in pesanan_diproses %}
+                        <div class="card">
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">Pesanan #{{ pesanan.id }}</h3>
+                            <p class="text-gray-700 mb-1">Pelanggan: {{ pesanan.nama_pelanggan }}</p>
+                            <p class="text-gray-700 mb-1">Total: Rp {{ pesanan.total|floatformat:0 }}</p>
+                            <p class="text-gray-700 mb-4">Waktu: {{ pesanan.waktu_pesan|date:"H:i, d M Y" }}</p>
+                            <button class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md">Lihat Detail</button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-gray-600 text-center">Tidak ada pesanan yang sedang diproses saat ini.</p>
+            {% endif %}
+        </div>
+
+        <!-- Konten Tab: Pesanan Selesai -->
+        <div id="selesai" class="tab-content">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-6">Daftar Pesanan Selesai</h2>
+            {% if pesanan_selesai %}
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {% for pesanan in pesanan_selesai %}
+                        <div class="card">
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">Pesanan #{{ pesanan.id }}</h3>
+                            <p class="text-gray-700 mb-1">Pelanggan: {{ pesanan.nama_pelanggan }}</p>
+                            <p class="text-gray-700 mb-1">Total: Rp {{ pesanan.total|floatformat:0 }}</p>
+                            <p class="text-gray-700 mb-4">Waktu: {{ pesanan.waktu_pesan|date:"H:i, d M Y" }}</p>
+                            <button class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-md">Lihat Detail</button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-gray-600 text-center">Tidak ada pesanan yang selesai saat ini.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        function openTab(evt, tabName) {
+            // Deklarasikan semua variabel
+            var i, tabcontent, tablinks;
+
+            // Dapatkan semua elemen dengan class="tab-content" dan sembunyikan
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            // Dapatkan semua elemen dengan class="tab-button" dan hapus class "active"
+            tablinks = document.getElementsByClassName("tab-button");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+
+            // Tampilkan tab saat ini, dan tambahkan class "active" ke tombol yang membuka tab
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        // Secara default, buka tab pertama saat halaman dimuat
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelector(".tab-button").click();
+        });
+    </script>
+{% endblock content %}

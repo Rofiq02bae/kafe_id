@@ -18,10 +18,18 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from kafe_id.views import tampilkan_menu, proses_pesanan, Dashboard_admin, update_status_pesanan
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
     path('dashboard/', Dashboard_admin, name='dashboard_admin'),
     path('dashboard/update/<int:pesanan_id>/<str:status_baru>/', update_status_pesanan, name='update_status'),
+    # path('pesanan/<int:id>/<str:status>/', update_status_pesanan, name='update_status'),
     path('meja/<int:id>/', tampilkan_menu, name='tampilkan_menu'),
     path("pesanan/", proses_pesanan, name="proses_pesanan"),
 ]
+
+# Tambahkan URL untuk media files
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

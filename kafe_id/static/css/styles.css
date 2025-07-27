@@ -1,0 +1,101 @@
+body {
+           font-family: 'Inter', sans-serif;
+           background-color: #f3f4f6; /* Warna latar belakang abu-abu muda */
+       }
+       .tab-button.active {
+            border-bottom: 2px solid #E67E22; /* Garis bawah oranye untuk tab aktif */
+            color: #E67E22; /* Teks oranye untuk tab aktif */
+            font-weight: 600;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem; /* rounded-lg */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* shadow-md */
+            padding: 1.5rem;
+        }
+/* css untuk menu */
+/* Custom Shadow Components */
+  .card-shadow {
+    box-shadow: 0 8px 20px rgb(0 0 0 / 0.1);
+  }
+  .button-shadow {
+    box-shadow: 0 4px 12px rgb(237 147 52 / 0.4);
+  }
+  .badge-shadow {
+    box-shadow: 0 3px 8px rgb(237 147 52 / 0.25);
+  }
+  .font-custom {
+    font-family: 'Poppins', sans-serif;
+  }
+  /* Hide default arrow spinner on input */
+  input[type=search]::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+  }
+  /* Anim coffee beans flying */
+  @keyframes beanFloat {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(-40px) rotate(30deg); opacity: 0; }
+  }
+  .bean-float {
+    animation: beanFloat 6s linear infinite;
+  }
+    /* Custom scrollbar styles */
+ body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fefbf6; /* Soft background color */
+            /* Add padding to the bottom of the body to prevent content from being hidden by the fixed footer */
+            padding-bottom: 6rem; /* Adjust this value based on the height of your fixed button/footer */
+        }
+        .card-menu {
+            background-color: white;
+            border-radius: 1rem; /* rounded-xl */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: transform 0.2s ease-in-out;
+        }
+        .card-menu:hover {
+            transform: translateY(-5px);
+        }
+        .text-brown-dark {
+            color: #4A2C2A; /* Dark brown color for text */
+        }
+        .btn-add-to-cart {
+            background-color: #E67E22; /* Orange color for button */
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem; /* rounded-md */
+            font-weight: 600;
+            transition: background-color 0.2s ease-in-out;
+        }
+        .btn-add-to-cart:hover {
+            background-color: #D35400; /* Darker orange on hover */
+        }
+        input[type="number"] {
+            -moz-appearance: textfield; /* Firefox */
+        }
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none; /* Chrome, Safari, Edge */
+            margin: 0;
+        }
+        /* Style for the fixed "Pesan" button container */
+        .fixed-bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: white; /* Or any background color you prefer */
+            box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -1px rgba(0, 0, 0, 0.06); /* Shadow at the top */
+            padding: 1rem 0;
+            z-index: 1000; /* Ensure it's above other content */
+        }

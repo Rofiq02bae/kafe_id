@@ -1,14 +1,174 @@
-<h2>Meja: {{ meja.nama }}</h2>
-<form method="POST" action="{% url 'proses_pesanan' %}">
-  {% csrf_token %}
-  <input type="hidden" name="meja_id" value="{{ meja.id }}">
-  
-  {% for item in menu_items %}
-    <div>
-      <label>{{ item.nama }} - Rp{{ item.harga }}</label>
-      <input type="number" name="menu_{{ item.id }}" min="0" value="0">
-    </div>
-  {% endfor %}
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Menu List{% endblock title %}
 
-  <button type="submit">Pesan</button>
-</form>
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/menu.css' %}">
+<body class="bg-[#F7E9D7] text-gray-900 font-custom">
+
+<!-- HEADER & HERO -->
+<header class="container mx-auto px-6 pt-8 flex flex-wrap items-center justify-between">
+  <div class="flex items-center gap-2">
+    <svg class="w-7 h-7 text-orange-400" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" >
+      <path d="M8 7a4 4 0 1 1 8 0v4H8z"></path>
+      <path d="M12 21a8 8 0 0 0 8-8H4a8 8 0 0 0 8 8z"></path>
+      <path d="M12 11v-1a1 1 0 0 1 1-1h1M11 11v1a1 1 0 0 1-1 1h-1"></path>
+    </svg>
+    <div class="text-xl font-semibold select-none">Foodar</div>
+  </div>
+
+  <!-- Search & cart icons -->
+  <div class="flex gap-4 items-center mt-4 sm:mt-0">
+    <div class="relative">
+      <input
+        type="search"
+        placeholder="Cappuccino"
+        class="rounded-full text-sm pl-10 pr-4 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-300 placeholder:text-gray-400"
+        aria-label="Search coffee menu"
+      />
+      <svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="7" />
+        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+      </svg>
+    </div>
+    <button aria-label="View Cart" class="relative text-orange-400 hover:text-orange-500 transition-colors">
+      <svg class="w-6 h-6 stroke-current" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+        <circle cx="9" cy="21" r="1"></circle>
+        <circle cx="20" cy="21" r="1"></circle>
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 1.94-1.46L23 6H6"></path>
+      </svg>
+      <span class="absolute -top-2 -right-2 bg-orange-400 rounded-full text-white text-xs w-4 h-4 flex items-center justify-center font-bold select-none">3</span>
+    </button>
+  </div>
+</header>
+
+<main class="container mx-auto px-6 pt-10">
+
+  <!-- Hero Section -->
+  <section class="relative bg-[#F7E9D7] rounded-b-[6rem] mb-12 select-none">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+      <!-- Left Text -->
+      <div class="md:w-1/2">
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-4 leading-tight">
+          Selamat Datang <span class="text-orange-500">{{ Meja.nama }}</span><br /> Nikmati Hari Indahmu
+        </h1>
+        <p class="text-gray-600 max-w-md mb-8 sm:mb-10">
+          Tingkatkan produktivitas Anda dan bangun suasana hati Anda dengan segelas kopi di pagi hari
+        </p>
+        <div class="flex items-center gap-6">
+          <button class="bg-[#3D3111] text-white px-6 py-3 rounded-full flex items-center gap-3 button-shadow font-semibold hover:bg-[#584611] transition">
+            Order now 
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+              <circle cx="20" cy="14" r="1" />
+              <circle cx="7" cy="14" r="1" />
+              <path d="M2.5 5h18l-2.5 9h-13z"/>
+            </svg>
+          </button>
+          <a href="#" class="text-orange-500 font-semibold hover:underline">More menu</a>
+        </div>
+      </div>
+      <!-- Right Image & Tags -->
+      <div class="md:w-1/2 mt-12 md:mt-0 flex justify-center relative">
+        <div class="bg-[#3D3111] rounded-full w-56 h-56 flex items-center justify-center shadow-lg relative">
+          <img 
+            src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f5df21f2-b1ea-4d38-bcf3-413cc3e1a654.png" 
+            alt="Close up cup of cappuccino coffee with foam milk art latte" 
+            class="rounded-full drop-shadow-lg z-10"
+            onerror="this.style.display='none'"
+          />
+          <!-- Tags around the cup -->
+          <div class="absolute top-6 left-4 bg-white rounded-full px-4 py-1 text-sm font-semibold badge-shadow shadow-md">
+            Cappuccino
+          </div>
+          <div class="absolute top-12 right-4 bg-white rounded-full px-3 py-1 flex items-center gap-1 text-sm font-semibold badge-shadow shadow-md">
+            4.8 <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.973a1 1 0 0 0 .95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 0 0-.364 1.118l1.286 3.973c.3.922-.755 1.688-1.54 1.118l-3.38-2.455a1 1 0 0 0-1.175 0l-3.38 2.455c-.784.57-1.838-.196-1.539-1.118l1.285-3.973a1 1 0 0 0-.363-1.118L2.05 9.4c-.783-.57-.38-1.81.588-1.81h4.176a1 1 0 0 0 .951-.69l1.285-3.973z" /></svg>
+          </div>
+          <div class="absolute bottom-6 left-12 bg-white rounded-full px-4 py-1 text-sm font-semibold badge-shadow shadow-md">
+            18K
+          </div>
+        </div>
+        <!-- Floating coffee beans -->
+        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/aafb092b-2352-46c7-af98-dc45a5936871.png" alt="Dark roasted coffee bean with shiny surface, floating decoration top left" class="absolute top-4 left-6 rotate-12 w-10 h-10 bean-float" onerror="this.style.display='none'" />
+        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/979cea99-7983-495e-8c36-95b3c68118f4.png" alt="Small roasted coffee bean falling gently, decorative accent right upper" class="absolute top-14 right-16 rotate-45 w-9 h-9" onerror="this.style.display='none'" />
+        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/d2ffa5bb-ef97-4732-834a-17bafda0acc3.png" alt="Single roasted coffee bean closeup, small floating decoration near cup" class="absolute top-28 right-8 rotate-6 w-7 h-7" onerror="this.style.display='none'" />
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Special Menu Section -->
+  <section class="mb-16 select-none">
+    <h2 class="text-2xl font-bold mb-8 pl-1">Special menu <span class="underline decoration-orange-400 decoration-2 underline-offset-4">for you</span></h2>
+    <div class="max-w-6xl mx-auto mb-20"> <!-- Added mb-20 to ensure content isn't hidden by the fixed button -->
+        <h2 class="text-3xl font-bold text-brown-dark mb-8 text-center">Daftar Menu</h2>
+
+        <form id="orderForm" method="POST" action="{% url 'proses_pesanan' %}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% csrf_token %}
+            <input type="hidden" name="meja_id" value="{{ meja.id }}">
+
+            <!-- Loop melalui item menu dari database -->
+            {% for item in menu_items %}
+                <div class="bg-white rounded-2xl p-5 shadow-lg flex flex-col items-center text-center hover:shadow-xl transition-shadow">
+                    <!-- Gambar Menu - Cek beberapa kemungkinan nama file -->
+                    <img src="/media/{% if item.nama|lower == 'es teh' %}esteh{% elif item.nama|lower == 'nasi goreng' %}nasgor{% elif item.nama|lower == 'mie goreng' %}mi-goreng{% else %}{{ item.nama|lower|cut:" " }}{% endif %}.jpg" alt="{{ item.nama }}" class="w-36 h-36 object-cover rounded-full mb-4 shadow-md" onerror="this.src='https://via.placeholder.com/150?text={{ item.nama|urlencode }}'">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-2">{{ item.nama }}</h3>
+                    <p class="text-orange-500 text-xl font-bold mb-4">Rp {{ item.harga|floatformat:0 }}</p>
+                    <div class="flex items-center space-x-3 mb-2">
+                        <button type="button" class="bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold" onclick="updateQuantity(this, -1)">-</button>
+                        <input type="number" name="menu_{{ item.id }}" min="0" value="0" class="w-16 text-center border border-gray-300 rounded-md py-1 focus:outline-none focus:ring-2 focus:ring-orange-500">
+                        <button type="button" class="bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold" onclick="updateQuantity(this, 1)">+</button>
+                    </div>
+                </div>
+            {% empty %}
+                <p class="col-span-full text-center text-gray-600">Tidak ada item menu yang tersedia saat ini.</p>
+            {% endfor %}
+        </form>
+    </div>
+
+    <!-- Fixed bottom bar for the "Pesan" button -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white shadow-lg py-4 bg-opacity-95 backdrop-blur-sm">
+        <div class="container mx-auto flex justify-center">
+            <button type="submit" form="orderForm" class="bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-3 rounded-full shadow-lg transition-all transform hover:scale-105 text-lg">
+                Pesan Sekarang
+            </button>
+        </div>
+    </div>
+  </section>
+
+
+  <!-- Background Coffee Cup Pattern bottom corners -->
+  <div aria-hidden="true" class="pointer-events-none fixed bottom-4 left-2 opacity-10 select-none">
+    <svg class="w-20 h-20 stroke-orange-200" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" >
+      <path d="M18 9h3v7a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-7h3m12 0a3 3 0 1 0-6 0zm-12 0a3 3 0 1 1 6 0zm12 0v-3"></path>
+    </svg>
+  </div>
+  <div aria-hidden="true" class="pointer-events-none fixed bottom-4 right-2 opacity-10 select-none rotate-180">
+    <svg class="w-20 h-20 stroke-orange-200" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" >
+      <path d="M18 9h3v7a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-7h3m12 0a3 3 0 1 0-6 0zm-12 0a3 3 0 1 1 6 0zm12 0v-3"></path>
+    </svg>
+  </div>
+
+</main>
+<script>
+        // Fungsi untuk menambah atau mengurangi kuantitas
+        function updateQuantity(buttonElement, change) {
+            // Temukan input number yang terkait dengan tombol yang diklik
+            // Jika tombol adalah '-', input adalah elemen berikutnya
+            // Jika tombol adalah '+', input adalah elemen sebelumnya
+            let inputElement;
+            if (change === -1) {
+                inputElement = buttonElement.nextElementSibling;
+            } else {
+                inputElement = buttonElement.previousElementSibling;
+            }
+
+            let currentValue = parseInt(inputElement.value);
+            let newValue = currentValue + change;
+            if (newValue < 0) newValue = 0; // Pastikan tidak kurang dari 0
+            inputElement.value = newValue;
+        }
+    </script>
+</body>
+
+{% endblock %}

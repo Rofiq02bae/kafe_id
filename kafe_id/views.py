@@ -3,6 +3,7 @@ from kafe_id.models import Meja, Menu, Pesanan, DetailPesanan, User
 from django.utils import timezone
 from django.urls import reverse
 
+
 def tampilkan_menu(request, id):
     meja = get_object_or_404(Meja, pk=id)
     menu_items = Menu.objects.all()
@@ -43,8 +44,18 @@ def proses_pesanan(request):
         return redirect('tampilkan_menu', id=1)
 
 def Dashboard_admin(request):
-    daftar_pesanan = Pesanan.objects.all().order_by('id')
-    context = {'daftar_pesanan' : daftar_pesanan}
+    print('Pesanan baru: test pesanan') 
+
+    pesanan_antri = Pesanan.objects.filter(status='antri')
+    pesanan_diproses = Pesanan.objects.filter(status='proses')
+    pesanan_selesai = Pesanan.objects.filter(status='selesai')
+
+    context = {
+        'pesanan_antri': pesanan_antri,
+        'pesanan_diproses': pesanan_diproses,
+        'pesanan_selesai': pesanan_selesai,
+    }
+
     return render(request, 'kafe/dashboard.html', context)
 
 def update_status_pesanan(request, pesanan_id, status_baru):
@@ -52,3 +63,9 @@ def update_status_pesanan(request, pesanan_id, status_baru):
     pesanan.status = status_baru
     pesanan.save()
     return redirect('dashboard_admin')
+
+# def update_status(request, id, status):
+#     pesanan = get_object_or_404(Pesanan, pk=id)
+#     pesanan.status = status
+#     pesanan.save()
+#     return redirect('dashboard_admin')

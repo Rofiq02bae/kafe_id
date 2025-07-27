@@ -1,8 +1,11 @@
 #!/bin/bash
 # Build script for Vercel deployment
 
-# Aktifkan virtualenv jika diperlukan
-# source env/bin/activate
+# Install dependencies
+pip install -r requirements.txt
+
+# Make migrations 
+python manage.py makemigrations
 
 # Migrasi database
 python manage.py migrate

@@ -23,18 +23,22 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-+b%w6*a1^@6$yrk*w!l)8q^gz@ov-=51f=(#+++%3e@te_9d+1"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     'localhost:8000',
+    '.vercel.app',  # Untuk subdomain Vercel
+    '.now.sh',      # Format lama subdomain Vercel
 ]
 
 # Tambahkan trusted origins untuk CSRF
 CSRF_TRUSTED_ORIGINS = [
     'https://localhost:8000',
     'http://localhost:8000',
+    'https://*.vercel.app',
+    'https://*.now.sh',
 ]
 
 
@@ -52,6 +56,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -129,6 +134,10 @@ STATIC_URL = "static/"
 STATICFILES_DIRS = [
     BASE_DIR / "kafe_id/static",
 ]
+STATIC_ROOT = BASE_DIR / 'staticfiles_build' / 'static'
+
+# Whitenoise settings
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Media files (Uploads)
 MEDIA_URL = '/media/'

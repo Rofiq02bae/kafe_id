@@ -1,14 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Pesanan Sukses{% endblock title %}
+
+{% block content %}
 <meta http-equiv="refresh" content="3;url={{ redirect_url }}">
-<h2>Pesanan dari Meja {{ meja.nama }} berhasil dikirim!</h2>
-<p>Silakan tunggu pesanan Anda diproses.</p>
-<p>Anda akan diarahkan ke menu dalam <span id="countdown">3</span> detik...</p>
+
+<div class="min-h-screen flex items-center justify-center bg-[#F7E9D7]">
+  <div class="bg-white p-8 rounded-2xl shadow-lg max-w-md w-full text-center">
+    <div class="mb-6">
+      <svg class="w-20 h-20 text-green-500 mx-auto" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+      </svg>
+    </div>
+    
+    <h2 class="text-3xl font-bold text-gray-800 mb-4">Pesanan Berhasil!</h2>
+    <p class="text-xl mb-2">Meja: <span class="font-semibold text-orange-500">{{ meja.nama }}</span></p>
+    <p class="text-gray-600 mb-6">Silakan tunggu pesanan Anda diproses.</p>
+    
+    <div class="py-3 px-5 bg-gray-100 rounded-lg text-gray-700">
+      Anda akan diarahkan ke menu dalam <span id="countdown" class="font-bold text-orange-500">3</span> detik...
+    </div>
+  </div>
+</div>
+
 <script>
   let seconds = 3;
   const countdown = document.getElementById('countdown');
-  setInterval(function() {
+  const timer = setInterval(function() {
     seconds--;
     if (seconds > 0) {
       countdown.textContent = seconds;
+    } else if (seconds === 0) {
+      countdown.textContent = "Mengalihkan...";
+      clearInterval(timer);
     }
   }, 1000);
 </script>
+{% endblock %}
